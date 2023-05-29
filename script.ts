@@ -198,7 +198,10 @@ export function wait(seconds = 2): Promise<void> {
     network: dependencies.config.network,
     rpcEndpoint: honeycomb.connection.rpcEndpoint,
   });
-
+  if (balance / web3.LAMPORTS_PER_SOL < 0.1)
+    throw new Error(
+      "Insufficient SOLs, you need atleast 0.1 SOLs to create a project in keys/authority.json"
+    );
   const project = await HoneycombProject.new(honeycomb, {
     name: projectName,
     expectedMintAddresses: mints.length,
