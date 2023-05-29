@@ -18,7 +18,7 @@ export type Config = {
 };
 
 export const METADATA_PROGRAM_ID = new web3.PublicKey(
-  "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
+  "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s" // METAPLEX
 );
 
 export const devnetConfig: Config = {
@@ -37,12 +37,12 @@ const services = [
   "tokenmanager",
   "paywall",
   "staking",
-  "missions",
+  "missions", // slicing till here, ignoring other services
   "raffles",
   "guildkit",
   "gamestate",
   "matchmaking",
-];
+].slice(0, 6);
 export const prepare = async () => {
   const network: "mainnet" | "devnet" = ["mainnet", "devnet"].includes(
     process.env.TEST_NETWORK_SOL as string
@@ -85,7 +85,7 @@ export const prepare = async () => {
         },
       },
     ],
-    services: services.slice(0, 6),
+    services: services,
     mints: await HoneycombProject._filterUniqueMints(
       require("./mints.json").map(
         (address: string) => new web3.PublicKey(address)
@@ -204,12 +204,8 @@ export function wait(seconds = 2): Promise<void> {
     expectedMintAddresses: mints.length,
     profileDataConfigs: profileDataConfigs as any,
   });
-  
-  console.log(
-    projectName + " Project:",
-    honeycomb.project().address.toString()
-  );
-  
+
+  console.log(projectName + " Project:", project.address.toString());
   honeycomb.use(project);
 
   const [driver] = tryKeyOrGenerate(

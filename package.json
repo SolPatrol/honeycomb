@@ -10,10 +10,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@honeycomb-protocol/asset-assembler": "^0.0.1",
-    "@honeycomb-protocol/asset-manager": "^0.0.1",
-    "@honeycomb-protocol/hive-control": "^0.0.98",
-    "@solana/web3.js": "^1.76.0",
+    "@honeycomb-protocol/asset-assembler": "^0.0.7",
+    "@honeycomb-protocol/asset-manager": "^0.0.7",
+    "@honeycomb-protocol/hive-control": "^0.0.101",
+    "@solana/spl-account-compression": "^0.1.8",
+    "@solana/web3.js": "^1.77.2",
     "dotenv": "^16.0.3",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4"
