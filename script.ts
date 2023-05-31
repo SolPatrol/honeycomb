@@ -1,3 +1,5 @@
+// this script is interacting with our on-chain program to create a new project
+
 import * as web3 from "@solana/web3.js";
 import fs from "fs";
 import path from "path";
@@ -18,7 +20,7 @@ export type Config = {
 };
 
 export const METADATA_PROGRAM_ID = new web3.PublicKey(
-  "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s" // METAPLEX
+  "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s" // METAPLEX metadata
 );
 
 export const devnetConfig: Config = {
@@ -31,13 +33,13 @@ export const mainnetConfig: Config = {
   network: "mainnet-beta",
   endpoint: "https://api.metaplex.solana.com",
 };
-const services = [
+const services = [ //choose which services you want
   "assembler",
   "assetmanager",
   "tokenmanager",
   "paywall",
   "staking",
-  "missions", // slicing till here, ignoring other services
+  "missions", //slicing to just 6 for now but can choose which ones we want
   "raffles",
   "guildkit",
   "gamestate",
@@ -63,13 +65,13 @@ export const prepare = async () => {
     config,
     signer,
     connection,
-    projectName: "SolPatrol",
+    projectName: "SolPatrol", //specify project name
     critarias: {
       collection: new web3.PublicKey(
         "7Zcfq1fdQYYjKreRoKSf6ungwrFGCgoPcapEeTkj1cQX"
       ),
     },
-    profileDataConfigs: [
+    profileDataConfigs: [ //these are all the variables that are going to be used and will be assigned to each user profile
       { label: "xp", dataType: { __kind: "SingleValue" } },
       { label: "level", dataType: { __kind: "SingleValue" } },
       { label: "bounty", dataType: { __kind: "SingleValue" } },
@@ -77,7 +79,7 @@ export const prepare = async () => {
       { label: "resource2", dataType: { __kind: "SingleValue" } },
       { label: "resource3", dataType: { __kind: "SingleValue" } },
       {
-        label: "Participations",
+        label: "Participations", // cost for is coming to this 0.01 SOL
         dataType: {
           __kind: "Entity",
           merkleTreeMaxDepth: 14,
@@ -85,7 +87,7 @@ export const prepare = async () => {
         },
       },
     ],
-    services: services,
+    services: services.slice(0, 6), //this is where we slice the services from above 
     mints: await HoneycombProject._filterUniqueMints(
       require("./mints.json").map(
         (address: string) => new web3.PublicKey(address)
@@ -146,7 +148,7 @@ export function parseService(service: string, id: web3.PublicKey): Service {
   }
 }
 
-function tryKeyOrGenerate(keyPath: string): [web3.Keypair, boolean] {
+function tryKeyOrGenerate(keyPath: string): [web3.Keypair, boolean] { //utility function to generate a new key if you do not have one and lets add a note that will say you need some SOL and to view docs and if balance is less than design balance we will need to have it throw a catch error to nofity user to load up with x amount of sol
   try {
     return [
       web3.Keypair.fromSecretKey(
